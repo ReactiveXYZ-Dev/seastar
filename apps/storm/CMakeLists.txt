@@ -20,38 +20,21 @@
 # Copyright (C) 2018 Scylladb, Ltd.
 #
 
-# Logical target for all applications.
-add_custom_target (apps)
+set (Seastar_APP_STORM_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+set (Seastar_APP_STORM_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
 
-macro (seastar_add_app name)
-  set (args ${ARGN})
+seastar_add_app (storm
+  SOURCES
+    storm.cc
+    storm.hh)
 
-  cmake_parse_arguments (
-    parsed_args
-    ""
-    ""
-    "SOURCES"
-    ${args})
+target_include_directories (app_storm
+  PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
-  set (target app_${name})
-  add_executable (${target} ${parsed_args_SOURCES})
+#
+# Tests.
+#
 
-  target_include_directories (${target}
-    PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
-
-  target_link_libraries (${target}
-    PRIVATE seastar_private)
-
-  set_target_properties (${target}
-    PROPERTIES
-      OUTPUT_NAME ${name})
-
-  add_dependencies (apps ${target})
-endmacro ()
-
-add_subdirectory (httpd)
-add_subdirectory (io_tester)
-add_subdirectory (iotune)
-add_subdirectory (memcached)
-add_subdirectory (seawreck)
-add_subdirectory (storm)
+# if (Seastar_TESTING)
+#  add_subdirectory (tests)
+# endif ()

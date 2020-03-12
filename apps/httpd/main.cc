@@ -83,6 +83,7 @@ int main(int ac, char** av) {
         }).then([server, port] {
             std::cout << "Seastar HTTP server listening on port " << port << " ...\n";
             engine().at_exit([server] {
+                std::cout << "Seastar HTTP server stopped" << "\n";
                 return server->stop();
             });
         });
