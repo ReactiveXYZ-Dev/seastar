@@ -48,6 +48,10 @@ option (Seastar_EXPERIMENTAL_COROUTINES_TS
   "Enable experimental support for Coroutines TS."
   OFF)
 
+option (Seastar_SSTRING
+  "Use seastar's own string implementation"
+  ON)
+
 set (Seastar_API_LEVEL
   "2"
   CACHE
@@ -590,6 +594,7 @@ add_library (seastar STATIC
   src/core/scollectd-impl.hh
   src/core/systemwide_memory_barrier.cc
   src/core/smp.cc
+  src/core/sstring.cc
   src/core/thread.cc
   src/core/uname.cc
   src/core/vla.hh
@@ -743,6 +748,10 @@ endif ()
 if (Seastar_EXPERIMENTAL_COROUTINES_TS)
   target_compile_options (seastar PUBLIC -fcoroutines-ts -g)
   target_compile_definitions (seastar PUBLIC SEASTAR_COROUTINES_TS)
+endif ()
+
+if (Seastar_SSTRING)
+  target_compile_options (seastar PUBLIC -DSEASTAR_SSTRING)
 endif ()
 
 if (Seastar_GCC6_CONCEPTS OR Concepts_FOUND)
